@@ -15,6 +15,14 @@ class SudokuGrid implements GridInterface
         $this->data = $data;
     }
 
+    public function get(int $rowIndex, int $columnIndex): int {
+        return $this->data[$rowIndex][$columnIndex];
+    }
+
+    public function set(int $rowIndex, int $columnIndex, int $value): void {
+        $this->data[$rowIndex][$columnIndex] = $value;
+    }
+
     public function row(int $rowIndex): array {
         if($rowIndex < 0 || $rowIndex > 8){
             throw new InvalidArgumentException("Invalid row index given : $rowIndex (Must be between 0 and 8)");

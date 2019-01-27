@@ -15,6 +15,22 @@ interface GridInterface {
     public function __construct(array $data);
 
     /**
+     * Retourne la valeur d'une cellule
+     * @param int $rowIndex Index de ligne
+     * @param int $columnIndex Index de colonne
+     * @return int Valeur
+     */
+    public function get(int $rowIndex, int $columnIndex): int;
+
+    /**
+     * Affecte une valeur dans une cellule
+     * @param int $rowIndex Index de ligne
+     * @param int $columnIndex Index de colonne
+     * @param int $value Valeur
+     */
+    public function set(int $rowIndex, int $columnIndex, int $value): void;
+
+    /**
      * Retourne les données d'une ligne à partir de son index
      * @param int $rowIndex Index de ligne (entre 0 et 8)
      * @return array Chiffres de la ligne demandée
