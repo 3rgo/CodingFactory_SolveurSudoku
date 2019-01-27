@@ -26,6 +26,8 @@ final class SudokuGridTest extends TestCase
     {
         $newGrid = SudokuGrid::loadFromFile(realpath(rtrim(__DIR__, '/') . '/../grids/full.json'));
         $this->assertEquals($this->grid->data, $newGrid->data);
+        $missingFileGrid = SudokuGrid::loadFromFile("a");
+        $this->assertNull($missingFileGrid);
     }
 
     public function testRows(): void
@@ -67,14 +69,38 @@ final class SudokuGridTest extends TestCase
     public function testIsFilled(): void
     {
         $this->assertTrue($this->grid->isFilled());
-        $newGrid = SudokuGrid::loadFromFile(realpath(rtrim(__DIR__, '/') . '/../grids/level1.json'));
-        $this->assertFalse($newGrid->isFilled());
+        foreach(range(1,5) as $index){
+            $newGrid = SudokuGrid::loadFromFile(realpath(rtrim(__DIR__, '/') . "/../grids/level$index.json"));
+            $this->assertFalse($newGrid->isFilled());
+        }
     }
 
     public function testIsValid(): void
     {
         $this->assertTrue($this->grid->isValid());
-        $newGrid = SudokuGrid::loadFromFile(realpath(rtrim(__DIR__, '/') . '/../grids/level1.json'));
-        $this->assertFalse($newGrid->isValid());
+        foreach(range(1,5) as $index){
+            $newGrid = SudokuGrid::loadFromFile(realpath(rtrim(__DIR__, '/') . "/../grids/level$index.json"));
+            $this->assertFalse($newGrid->isValid());
+        }
+    }
+
+    public function testIsValueValidForPosition(): void
+    {
+        $grid = SudokuGrid::loadFromFile(realpath(rtrim(__DIR__, '/') . "/../grids/level1.json"));
+        $this->assertTrue($grid->isValueValidForPosition(0,0,1));
+        $this->assertFalse($grid->isValueValidForPosition(0,0,2));
+    }
+
+    public function testGetNextRowColumn(): void
+    {
+        foreach(range(0, 9) as $i){
+            $randomR = random_int(0, 8);
+            $randomC = random_int(0, 8);
+            list($r, $c) = $this->grid->getNextRowColumn($randomR, $randomC);
+            $expectedC = ($randomC+1) % 9;
+            $expectedR = $randomR + ($expectedC == 0 ? 1 : 0);
+            $this->assertEquals($expectedR, $r);
+            $this->assertEquals($expectedC, $c);
+        }
     }
 }

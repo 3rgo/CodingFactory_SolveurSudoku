@@ -1,14 +1,17 @@
 <?php
 
-class SudokuGrid
+class SudokuGrid implements GridInterface
 {
     public $data;
 
-    public static function loadFromFile($filepath){
+    public static function loadFromFile($filepath): ?SudokuGrid {
+        if(!file_exists($filepath)){
+            return null;
+        }
         return new SudokuGrid(json_decode(file_get_contents($filepath)));
     }
 
-    public function __construct(array $data){
+    public function __construct(array $data) {
         $this->data = $data;
     }
 
@@ -46,6 +49,22 @@ class SudokuGrid
         return implode(PHP_EOL, array_map(function($row){
             return implode(" ", $row);
         }, $this->data));
+    }
+
+    public function isValueValidForPosition(int $rowIndex, int $columnIndex, int $value): bool {
+        $squareIndex = (intdiv($rowIndex, 3) * 3) + intdiv($columnIndex, 3);
+        return !in_array($value, $this->row($rowIndex))
+            && !in_array($value, $this->column($columnIndex))
+            && !in_array($value, $this->square($squareIndex));
+    }
+
+    public function getNextRowColumn(int $rowIndex, int $columnIndex): array {
+        $columnIndex++;
+        if($columnIndex >= 9){
+            $columnIndex = 0;
+            $rowIndex++;
+        }
+        return [$rowIndex, $columnIndex];
     }
 
     public function isValid(): bool {
