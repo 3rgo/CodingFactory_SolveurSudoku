@@ -69,8 +69,8 @@ final class SudokuGridTest extends TestCase
     public function testIsFilled(): void
     {
         $this->assertTrue($this->grid->isFilled());
-        foreach(range(1,5) as $index){
-            $newGrid = SudokuGrid::loadFromFile(realpath(rtrim(__DIR__, '/') . "/../grids/level$index.json"));
+        foreach(range(1,4) as $index){
+            $newGrid = SudokuGrid::loadFromFile(realpath(rtrim(__DIR__, '/') . "/../grids/grid$index.json"));
             $this->assertFalse($newGrid->isFilled());
         }
     }
@@ -78,15 +78,15 @@ final class SudokuGridTest extends TestCase
     public function testIsValid(): void
     {
         $this->assertTrue($this->grid->isValid());
-        foreach(range(1,5) as $index){
-            $newGrid = SudokuGrid::loadFromFile(realpath(rtrim(__DIR__, '/') . "/../grids/level$index.json"));
+        foreach(range(1,4) as $index){
+            $newGrid = SudokuGrid::loadFromFile(realpath(rtrim(__DIR__, '/') . "/../grids/grid$index.json"));
             $this->assertFalse($newGrid->isValid());
         }
     }
 
     public function testIsValueValidForPosition(): void
     {
-        $grid = SudokuGrid::loadFromFile(realpath(rtrim(__DIR__, '/') . "/../grids/level1.json"));
+        $grid = SudokuGrid::loadFromFile(realpath(rtrim(__DIR__, '/') . "/../grids/grid1.json"));
         $this->assertTrue($grid->isValueValidForPosition(0,0,1));
         $this->assertFalse($grid->isValueValidForPosition(0,0,2));
     }
